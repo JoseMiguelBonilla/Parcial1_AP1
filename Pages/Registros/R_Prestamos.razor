@@ -1,0 +1,118 @@
+@page "/R_Prestamos"
+@inject PrestamosBLL PrestamosBLL
+@using Prueba2.Models
+
+
+<EditForm Model="Prestamos" OnValidSubmit="Guardar">
+     <DataAnnotationsValidator />
+
+    <div class="container">
+        <div class="card shadow-lg">
+            <div class="card-header">
+                <h3>Registro de Prestamos </h3>
+            </div>
+            <div class="card-body">
+                @*BuscarId*@
+                <div class="col-xs-12 col-sm-12 col-md-8 col-lg-6 col-xl-4">
+                    <div class="input-group mb-3">
+                        <InputNumber @bind-Value="Prestamos.PrestamoId" class="form-control" aria-describedby="buscarButton" />
+                        <button @onclick="Buscar" class="btn btn-outline-primary" type="button" id="buscarButton">
+                            <i class="oi oi-magnifying-glass" />
+                        </button>
+                    </div>
+                </div>
+
+                @*PrestamoId*@
+                <div class="mb-3">
+                    <label class="form-label">PrestamoId</label>
+                    <InputNumber @bind-Value="Prestamos.PrestamoId" class="form-control" />
+                    <ValidationMessage For="@(() => Prestamos.PrestamoId)" />
+                </div>
+
+                 @*Fecha*@
+                <div class="mb-3">
+                    <label class="form-label">Fecha</label>
+                    <InputNumber @bind-Value="Prestamos.fecha" class="form-control" />
+                    <ValidationMessage For="@(() => Prestamos.fecha)" />
+                </div>
+
+                 @*Monto*@
+                <div class="mb-3">
+                    <label class="form-label">Monto</label>
+                    <InputNumber @bind-Value="Prestamos.Monto" class="form-control" />
+                    <ValidationMessage For="@(() => Prestamos.Monto)" />
+                </div>
+
+                  @*Balance*@
+                <div class="mb-3">
+                    <label class="form-label">Balance</label>
+                    <InputNumber @bind-Value="Prestamos.Balance" class="form-control" />
+                    <ValidationMessage For="@(() => Prestamos.Balance)" />
+                </div>
+
+
+                  @*Concepto*@
+                <div class="mb-3">
+                    <label class="form-label">Concepto</label>
+                    <InputText @bind-Value="Prestamos.Concepto" class="form-control" />
+                    <ValidationMessage For="@(() => Prestamos.Concepto)" />
+                </div>
+
+              
+
+            </div>
+
+            <div class="card-footer d-flex justify-content-center">
+                <div class="btn-group" role="group">
+                    <button type="button" class="btn btn-primary" @onclick="Nuevo"> <i class="oi oi-file" /> Nuevo</button>
+                    <button type="submit" class="btn btn-success"> <i class="oi oi-document" /> Guardar</button>
+                    <button type="button" class="btn btn-danger" @onclick="Eliminar"><i class="oi oi-trash" /> Eliminar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</EditForm>
+
+@code {
+[Parameter]
+public int PrestamoId{get;set;}
+public Prestamos Prestamos {get;set;} = new Prestamos();
+protected override void OnInitialized()
+{
+   if(PrestamoId>0)
+   {
+      this.Prestamos.PrestamoId=this.PrestamoId;
+      Buscar();
+   }
+}
+
+    
+public void Guardar()
+{
+   PrestamosBLL.Guardar(Prestamos);
+   Nuevo();
+}
+public void Nuevo()
+{
+   this.Prestamos=new Prestamos();
+}
+
+public void Eliminar()
+{
+   PrestamosBLL.Eliminar(this.Prestamos);
+   Nuevo();
+}
+public void Buscar()
+{
+   var PrestamosEncontrada = PrestamosBLL.Buscar(Prestamos.PrestamoId);
+   if(PrestamosEncontrada != null)
+   {
+      this.Prestamos=PrestamosEncontrada;
+   }
+}
+
+}
+
+
